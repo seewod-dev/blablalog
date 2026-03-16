@@ -1,0 +1,16 @@
+/* @font-face {
+  font-family: "iconfont"; 
+  src: url('../assets/fonts/iconfont.ttf') format('truetype');
+} */
+
+/* 彩色图标 */
+@import "//at.alicdn.com/t/c/font_4664318_41k7bfrl926.css";
+
+/* 单色图标 */
+@import "//at.alicdn.com/t/c/font_4657333_74todjk6qon.css";
+
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+/* @font-face {
+  font-family: 'iconfont';  
+  src: url('//at.alicdn.com/t/c/font_4657333_s8wipdai9h.ttf?t=1725180355513') format('truetype');
+} */

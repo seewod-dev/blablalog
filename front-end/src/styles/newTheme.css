@@ -1,0 +1,44 @@
+:root {
+
+    --el-color-primary:#000000;
+    --el-color-primary-light-7:#d6d6d6;
+	--el-color-primary-light-9: #d6d6d6;
+  /* --el-color-primary: green; */
+    --el-menu-active-color: #000000;
+    --el-menu-text-color: #dddddd;
+
+  --el-menu-base-level-padding: 1rem;
+  --el-menu-item-height: calc(56px - 1rem);
+
+    --el-menu-hover-bg-color:#ffffff;
+    --el-menu-icon-width: 1.5rem;
+
+}
+.el-button, .el-button.is-round{
+    padding: 8px 8px;
+}
+.el-menu-item.is-active{
+    color: var(--el-menu-active-color);
+}
+.el-menu-item:hover{
+    background-color: var(--el-menu-hover-bg-color);
+    color: #000000;
+}
+.el-menu-item [class^=el-icon]{
+    font-size: 1.3rem;
+}
+.el-input {
+    --el-input-focus-border-color:#c0c4cc;
+}
+
+.el-dialog {
+    --el-dialog-border-radius: 0.25rem;
+    /* --el-dialog-padding-primary: 2rem; */
+}
+.el-button{
+    /* --el-button-hover-bg-color: rgb(0 0 255);
+    --el-button-bg-color: rgb(0 0 0 / 0.1); */
+}
+.el-button.is-text:not(.is-disabled):hover {
+    background-color: rgb(230 230 230 / 0.3);
+}

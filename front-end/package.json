@@ -1,0 +1,42 @@
+{
+  "name": "front-end",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@isle-editor/core": "^0.0.11",
+    "@isle-editor/vue3": "^0.0.11",
+    "@tiptap/cli": "^1.1.12",
+    "@tiptap/extension-bold": "^2.12.0",
+    "@tiptap/pm": "^2.12.0",
+    "@tiptap/starter-kit": "^2.12.0",
+    "@tiptap/vue-3": "^2.12.0",
+    "@umoteam/editor": "^6.1.1",
+    "axios": "^1.9.0",
+    "cal-heatmap": "^4.2.4",
+    "core-js": "^3.8.3",
+    "element-plus": "^2.9.10",
+    "element-tiptap": "^2.2.1",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "vditor": "^3.11.1",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "less": "^4.0.0",
+    "less-loader": "^8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
