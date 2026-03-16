@@ -97,6 +97,8 @@ services:
 
 ---
 
+与上文工作流保持一致，镜像名为 `ghcr.io/<owner>/<repo>:latest`，其中 `<owner>/<repo>` 即 GitHub 的 `github.repository` 值。
+
 ## 5. nginx 反向代理示例
 
 在宿主 nginx 中新增（或合并到现有站点配置），将流量转发到应用容器监听端口（3000）：
@@ -130,7 +132,7 @@ server {
 - Job A（构建与推送镜像）：在 `ubuntu-latest` 上执行。
 - Job B（部署）：在服务器的自托管 Runner 上执行，使用本地的 `/opt/blablalog/docker-compose.yml` 将镜像拉起。
 
-在仓库中新增工作流文件示例（路径 `.github/workflows/cicd.yaml`）：
+在仓库中新增工作流文件示例（路径 `.github/workflows/cicd.yml`）：
 
 ```yaml
 name: CI/CD
