@@ -76,6 +76,11 @@ jobs:
             if [ -z "$NET" ]; then NET="apps"; fi
             docker network inspect "$NET" >/dev/null 2>&1 || docker network create "$NET"
             export INFRA_NETWORK_NAME="$NET"
+            export MONGO_USER='${{ secrets.MONGO_USER }}'
+            export MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}'
+            export MONGO_AUTH_SOURCE='${{ secrets.MONGO_AUTH_SOURCE }}'
+            export MONGO_PORT='${{ secrets.MONGO_PORT }}'
+            export MONGO_DBNAME='${{ secrets.MONGO_DBNAME }}'
             docker compose -f /opt/blablalog/docker-compose.yml pull
             docker compose -f /opt/blablalog/docker-compose.yml up -d
             docker image prune -f
