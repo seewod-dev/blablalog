@@ -4,21 +4,21 @@ services:
     image: ghcr.io/seewod-dev/blablalog:latest
     container_name: blablalog-app
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
       - MONGO_HOST=mongo  # 使用服务名访问MongoDB
     volumes:
       - /opt/blablalog/runtime/avataruploads:/workspace/back-end/public/avataruploads
-      - /opt/blablalog/runtime/coverImg_uploads:/workspace/back-end/public/avataruploads
+      - /opt/blablalog/runtime/coverImg_uploads:/workspace/back-end/public/coverImg_uploads
       - /opt/blablalog/runtime/photo:/workspace/back-end/public/photo
-      - /opt/blablalog/runtime/proprojects:/workspace/back-end/public/projects
+      - /opt/blablalog/runtime/projects:/workspace/back-end/public/projects
     networks:
-      - infra
+      apps:
+        aliases:
+          - blablalog-app
 
 networks:
-  infra:
-    name: infra
+  apps:
+    name: ${INFRA_NETWORK_NAME:-apps}
     external: true
