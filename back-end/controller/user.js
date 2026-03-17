@@ -49,16 +49,14 @@ const UserController = {
         let result = await UserService.loginVCode({email})
         //查询成功登录 失败注册并返回用户
         if(!result){
-          //注册新用户.账户
           let result_createAccount = await UserService.add({email}) 
           result = await UserService.find({_id: result_createAccount.insertedId})
-          //注册新用户.根据默认panelTemplate创建用户的panel
-          let result_panelCreate = await panelService.createPanel({userId: result._id}) //排名第一的模板 
-          // console.log("注册新用户.根据默认panelTemplate创建用户的panel",result_panelCreate)
-
-          // //注册新用户.根据默认diaryTemplate创建用户的MyDiaryTemplate
-          let result_MyDiaryTemplateCreate = await myDiaryTemplateService.createMyDiaryTemplate({userId: result._id}) //排名第一的模板 
-          // console.log("注册新用户.根据默认diaryTemplate创建用户的MyDiaryTemplate",result_MyDiaryTemplateCreate)
+          try{
+            await panelService.createPanel({userId: result._id})
+          }catch(e){}
+          try{
+            await myDiaryTemplateService.createMyDiaryTemplate({userId: result._id})
+          }catch(e){}
         }
         //生成token
         let token = null
