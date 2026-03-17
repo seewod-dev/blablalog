@@ -97,7 +97,7 @@ services:
 
 ---
 
-与上文工作流保持一致，镜像名为 `ghcr.io/<owner>/<repo>:latest`，其中 `<owner>/<repo>` 即 GitHub 的 `github.repository` 值。
+与上文工作流保持一致，镜像名为 `ghcr.io/<owner>/<repo>:latest`，其中 `<owner>/<repo>` 即 GitHub 的 `github.repository` 值。注意 GHCR 仓库名必须全小写，工作流已在构建阶段将 `${GITHUB_REPOSITORY}` 转为小写后再打标签。确保服务器上的 docker-compose.yml 也使用小写镜像名。
 
 ## 5. nginx 反向代理示例
 
