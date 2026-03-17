@@ -9,18 +9,18 @@ const DiaryController = {
   createDiary:async (req, res) => {
     let {_id:userId} = JWT.getPayload(req.headers["authorization"].split(" ")[1]) //token = req.headers["authorization"].split(" ")[1]
     let result_diaryTemplate = await myDiaryTemplateDao.find({userId})
+    let defaultTpl = await diaryTemplateDao.findOne()
     let now = new Date()
-    // console.log(result_diaryTemplate)
 
     let diaryData = {
       userId,
-      content: result_diaryTemplate.content,
+      content: (result_diaryTemplate && result_diaryTemplate.content) ? result_diaryTemplate.content : (defaultTpl && defaultTpl.content ? defaultTpl.content : ''),
       date: now.toLocaleDateString('zh-CN', {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',
       }).replace(/\D+/g, '/'),
-      wordCount: Array.from(result_diaryTemplate.content).length,
+      wordCount: Array.from((result_diaryTemplate && result_diaryTemplate.content) ? result_diaryTemplate.content : (defaultTpl && defaultTpl.content ? defaultTpl.content : '')).length,
       lastModified: now.toString(),
     }
 console.log(diaryData)

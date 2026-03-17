@@ -25,7 +25,7 @@ const panelService = {
                     assets: 1,
                 },
             },
-            customData: result_panelTemplate1.content //根据panelData返回结果
+            customData: (result_panelTemplate1 && result_panelTemplate1.content) ? result_panelTemplate1.content : ''
         }
         let now = new Date().toString()
 
