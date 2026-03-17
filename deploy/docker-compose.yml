@@ -16,9 +16,9 @@ services:
       - /opt/blablalog/runtime/photo:/workspace/back-end/public/photo
       - /opt/blablalog/runtime/proprojects:/workspace/back-end/public/projects
     networks:
-      - apps
+      - infra
 
 networks:
-  apps:
-    name: apps
+  infra:
+    name: infra
     external: true
