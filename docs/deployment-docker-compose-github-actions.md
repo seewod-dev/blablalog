@@ -200,6 +200,31 @@ jobs:
 
 ---
 
+### 6.1 使用 SSH 部署（方案 B）
+
+无需自托管 Runner，只需在仓库 Secrets 配置以下变量，并允许 GitHub 托管 Runner 通过 SSH 操作服务器：
+
+- `SSH_HOST`：服务器地址
+- `SSH_USER`：SSH 用户名（需具备 docker 权限）
+- `SSH_KEY`：私钥（OpenSSH 格式，建议为部署专用 Key）
+- `SSH_PORT`：端口（可选，默认 22）
+
+工作流部署 Job（deploy）将通过 SSH 在服务器执行以下命令：
+
+```
+docker login ghcr.io
+docker compose -f /opt/blablalog/docker-compose.yml pull
+docker compose -f /opt/blablalog/docker-compose.yml up -d
+docker image prune -f
+```
+
+注意：
+- `docker login ghcr.io` 使用了 `${{ secrets.GITHUB_TOKEN }}`，确保镜像私有时可正常拉取；
+- 服务器需已安装 Docker 与 Compose v2，并存有 `/opt/blablalog/docker-compose.yml`；
+- Compose 文件的镜像名须为全小写（例如 `ghcr.io/seewod/blablalog:latest`）。
+
+---
+
 ## 7. 首次上线步骤
 
 1) 服务器端准备
