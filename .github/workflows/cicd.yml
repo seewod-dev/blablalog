@@ -35,6 +35,30 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      - name: Compute lowercase image name
+        run: echo "IMAGE_NAME_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+      - name: Prepare remote directories
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sudo mkdir -p /opt/blablalog/runtime/avataruploads
+            sudo mkdir -p /opt/blablalog/runtime/coverImg_uploads
+            sudo mkdir -p /opt/blablalog/runtime/photo
+            sudo mkdir -p /opt/blablalog/runtime/projects
+            sudo mkdir -p /opt/blablalog
+      - name: Upload docker-compose.yml
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "deploy/docker-compose.yml"
+          target: "/opt/blablalog/"
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -44,6 +68,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+            export APP_IMAGE=ghcr.io/${{ env.IMAGE_NAME_LC }}:latest
             docker compose -f /opt/blablalog/docker-compose.yml pull
             docker compose -f /opt/blablalog/docker-compose.yml up -d
             docker image prune -f

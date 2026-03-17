@@ -1,0 +1,15 @@
+name: blablalog
+services:
+  app:
+    image: ${APP_IMAGE}
+    container_name: blablalog-app
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - /opt/blablalog/runtime/avataruploads:/workspace/back-end/public/avataruploads
+      - /opt/blablalog/runtime/coverImg_uploads:/workspace/back-end/public/coverImg_uploads
+      - /opt/blablalog/runtime/photo:/workspace/back-end/public/photo
+      - /opt/blablalog/runtime/projects:/workspace/back-end/public/projects
