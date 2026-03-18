@@ -61,6 +61,43 @@ jobs:
           source: "deploy/docker-compose.yml"
           target: "/opt/blablalog/"
           strip_components: 1
+      - name: Write .env to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cat > /opt/blablalog/.env << 'EOF'
+            NODE_ENV=production
+            PORT=3000
+            INFRA_NETWORK_NAME=${{ secrets.INFRA_NETWORK_NAME }}
+            MONGO_URI=${{ secrets.MONGO_URI }}
+            MONGO_HOST=mongo
+            MONGO_PORT=${{ secrets.MONGO_PORT }}
+            MONGO_AUTH_SOURCE=${{ secrets.MONGO_AUTH_SOURCE }}
+            MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}
+            MONGO_USER=${{ secrets.MONGO_USER }}
+            MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            SMTP_HOST=${{ secrets.SMTP_HOST }}
+            SMTP_PORT=${{ secrets.SMTP_PORT }}
+            SMTP_SECURE=${{ secrets.SMTP_SECURE }}
+            SMTP_USER=${{ secrets.SMTP_USER }}
+            SMTP_PASS=${{ secrets.SMTP_PASS }}
+            SMTP_FROM=${{ secrets.SMTP_FROM }}
+            MINIO_ENDPOINT=${{ secrets.MINIO_ENDPOINT }}
+            MINIO_PORT=${{ secrets.MINIO_PORT }}
+            MINIO_USE_SSL=${{ secrets.MINIO_USE_SSL }}
+            MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
+            MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+            MINIO_BUCKET=${{ secrets.MINIO_BUCKET }}
+            MINIO_PHOTO_PATH=${{ secrets.MINIO_PHOTO_PATH }}
+            HEFENG_PRIVATE_KEY_BASE64=${{ secrets.HEFENG_PRIVATE_KEY_BASE64 }}
+            HEFENG_KID=${{ secrets.HEFENG_KID }}
+            HEFENG_SUB=${{ secrets.HEFENG_SUB }}
+            EOF
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:

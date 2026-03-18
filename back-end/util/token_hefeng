@@ -1,30 +1,34 @@
 const { SignJWT, importPKCS8 } = require("jose");
-
-const YourPrivateKey = `
------BEGIN PRIVATE KEY-----
-MC4CAQAwBQYDK2VwBCIEIHQxKcVVjMAk16kpSg3PKk+gbM1RNpCJqnpjB0OBCFTL
------END PRIVATE KEY-----
-`.trim();
+const cfg = require("../config/appConfig")
 
 async function getToken_hefeng() {
-    let privateKey = await importPKCS8(YourPrivateKey, 'EdDSA');
-
-    const customHeader = {
-        alg: 'EdDSA',
-        kid: 'K6B8DPJHCB'
-    };
-    const iat = Math.floor(Date.now() / 1000) - 30;
-    const exp = iat + 900;
-    const customPayload = {
-        sub: '2BKUGJNR7W',
-        iat: iat,
-        exp: exp
-    };
-
-    let token_hefeng = await new SignJWT(customPayload)
-        .setProtectedHeader(customHeader)
-        .sign(privateKey);
-    return token_hefeng;
+    try{
+        const pkBase64 = (cfg.hefeng && cfg.hefeng.privateKeyBase64) || undefined;
+        const kid = (cfg.hefeng && cfg.hefeng.kid) || undefined;
+        const sub = (cfg.hefeng && cfg.hefeng.sub) || undefined;
+        if(!pkBase64 || !kid || !sub){
+            return '';
+        }
+        const pem = Buffer.from(pkBase64, 'base64').toString('utf-8').trim();
+        let privateKey = await importPKCS8(pem, 'EdDSA');
+        const customHeader = {
+            alg: 'EdDSA',
+            kid
+        };
+        const iat = Math.floor(Date.now() / 1000) - 30;
+        const exp = iat + 900;
+        const customPayload = {
+            sub,
+            iat,
+            exp
+        };
+        let token_hefeng = await new SignJWT(customPayload)
+            .setProtectedHeader(customHeader)
+            .sign(privateKey);
+        return token_hefeng;
+    }catch(e){
+        return '';
+    }
 }
 
 module.exports = { getToken_hefeng };

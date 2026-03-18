@@ -1,0 +1,30 @@
+{
+  "jwt": {
+    "secret": "huohuahua"
+  },
+  "mongo": {
+    "uri": "mongodb://localhost:27017/BlaBlaLog"
+  },
+  "smtp": {
+    "host": "smtp.qq.com",
+    "port": 465,
+    "secure": true,
+    "user": "2417802903@qq.com",
+    "pass": "bnanuxanhqcceaif",
+    "from": "BlaBlaLog 2417802903@qq.com>"
+  },
+  "minio": {
+    "endpoint": "localhost",
+    "port": 9000,
+    "useSSL": false,
+    "accessKey": "Yx9wEEwYrZH9JUcbnqTJ",
+    "secretKey": "g7s6SFNST6nwYsKdHmB8CZ8BsvvK5ZLA2iSbh4tx",
+    "bucket": "blablalog",
+    "photoPath": "photo/"
+  },
+  "hefeng": {
+    "privateKeyBase64": "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1DNENBUUF3QlFZREsyVndCQ0lFSURIUXhLY1ZWak1BazE2a3BTZzNQS0srZ2JNMVJOcENKcW5wakIwT0JDRlRMCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=",
+    "kid": "K6B8DPJHCB",
+    "sub": "2BKUGJNR7W"
+  }
+}

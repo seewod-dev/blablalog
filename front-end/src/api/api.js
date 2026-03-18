@@ -1,9 +1,10 @@
 import axios from 'axios'
+import cfg from '@/config'
 
 //协议与域名
 /* 【前后端部署在同一服务器时】协议域名会自动绑定，这里专门列出是为了适应 【前后端分离部署的项目】、以及有众多【跨端服务的项目】*/
-export const HOST = '';
-export const HOST_minio = 'http://yinghuonet.com:9000/blablalog';
+export const HOST = cfg.apiBase || '';
+export const HOST_minio = (cfg.minioBase || 'http://yinghuonet.com:9000') + '/blablalog';
 // export const UPLOAD_API = `${HOST}/system/file/upload?fileType=SYSTEM`;
 export const API = {
   //天气查询的接口

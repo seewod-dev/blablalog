@@ -1,5 +1,6 @@
 const jsonwebtoken = require("jsonwebtoken")
-const secret = "huohuahua"
+const cfg = require("../config/appConfig")
+const secret = (cfg.jwt && cfg.jwt.secret) || "huohuahua"
 const JWT = {
     generate(value,exprires){
         return jsonwebtoken.sign(value,secret,{expiresIn:exprires})
