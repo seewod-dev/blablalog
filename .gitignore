@@ -24,3 +24,7 @@ back-end/public/avataruploads/
 back-end/public/coverImg_uploads/
 back-end/public/photo/
 back-end/public/projects/
+
+# dev-only config files
+back-end/config/config.dev.json
+front-end/src/config/config.dev.js
