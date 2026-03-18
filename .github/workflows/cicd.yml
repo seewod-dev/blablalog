@@ -71,7 +71,15 @@ jobs:
           script: |
             FILE=/opt/blablalog/.env
             rm -f "$FILE"
-            put() { k="$1"; v="$2"; if [ -n "$v" ]; then case "$v" in *=*) v="${v#*=}";; esac; printf "%s=%s\n" "$k" "$v" >> "$FILE"; fi }
+            put() { 
+              k="$1"; v="$2"; 
+              if [ -n "$v" ]; then 
+                case "$v" in 
+                  "$k="*|"$k = "* ) v="${v#*=}";; 
+                esac; 
+                printf "%s=%s\n" "$k" "$v" >> "$FILE"; 
+              fi 
+            }
             put NODE_ENV '${{ vars.NODE_ENV || 'production' }}'
             put PORT '${{ vars.PORT || '3000' }}'
             NET="${{ secrets.INFRA_NETWORK_NAME || vars.INFRA_NETWORK_NAME }}"; if [ -z "$NET" ]; then NET="apps"; fi; put INFRA_NETWORK_NAME "$NET"
