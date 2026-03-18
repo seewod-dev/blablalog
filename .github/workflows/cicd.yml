@@ -69,35 +69,36 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cat > /opt/blablalog/.env << 'EOF'
-            NODE_ENV=production
-            PORT=3000
-            INFRA_NETWORK_NAME=${{ secrets.INFRA_NETWORK_NAME }}
-            MONGO_URI=${{ secrets.MONGO_URI }}
-            MONGO_HOST=mongo
-            MONGO_PORT=${{ secrets.MONGO_PORT }}
-            MONGO_AUTH_SOURCE=${{ secrets.MONGO_AUTH_SOURCE }}
-            MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}
-            MONGO_USER=${{ secrets.MONGO_USER }}
-            MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            SMTP_HOST=${{ secrets.SMTP_HOST }}
-            SMTP_PORT=${{ secrets.SMTP_PORT }}
-            SMTP_SECURE=${{ secrets.SMTP_SECURE }}
-            SMTP_USER=${{ secrets.SMTP_USER }}
-            SMTP_PASS=${{ secrets.SMTP_PASS }}
-            SMTP_FROM=${{ secrets.SMTP_FROM }}
-            MINIO_ENDPOINT=${{ secrets.MINIO_ENDPOINT }}
-            MINIO_PORT=${{ secrets.MINIO_PORT }}
-            MINIO_USE_SSL=${{ secrets.MINIO_USE_SSL }}
-            MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}
-            MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
-            MINIO_BUCKET=${{ secrets.MINIO_BUCKET }}
-            MINIO_PHOTO_PATH=${{ secrets.MINIO_PHOTO_PATH }}
-            HEFENG_PRIVATE_KEY_BASE64=${{ secrets.HEFENG_PRIVATE_KEY_BASE64 }}
-            HEFENG_KID=${{ secrets.HEFENG_KID }}
-            HEFENG_SUB=${{ secrets.HEFENG_SUB }}
-            EOF
+            FILE=/opt/blablalog/.env
+            rm -f "$FILE"
+            put() { k="$1"; v="$2"; if [ -n "$v" ]; then case "$v" in *=*) v="${v#*=}";; esac; printf "%s=%s\n" "$k" "$v" >> "$FILE"; fi }
+            put NODE_ENV '${{ vars.NODE_ENV || 'production' }}'
+            put PORT '${{ vars.PORT || '3000' }}'
+            NET="${{ secrets.INFRA_NETWORK_NAME || vars.INFRA_NETWORK_NAME }}"; if [ -z "$NET" ]; then NET="apps"; fi; put INFRA_NETWORK_NAME "$NET"
+            put MONGO_URI '${{ secrets.MONGO_URI || vars.MONGO_URI }}'
+            put MONGO_HOST '${{ secrets.MONGO_HOST || vars.MONGO_HOST || 'mongo' }}'
+            put MONGO_PORT '${{ secrets.MONGO_PORT || vars.MONGO_PORT || '27017' }}'
+            put MONGO_AUTH_SOURCE '${{ secrets.MONGO_AUTH_SOURCE || vars.MONGO_AUTH_SOURCE || 'admin' }}'
+            put MONGO_DBNAME '${{ secrets.MONGO_DBNAME || vars.MONGO_DBNAME || 'BlaBlaLog' }}'
+            put MONGO_USER '${{ secrets.MONGO_USER || vars.MONGO_USER }}'
+            put MONGO_PASSWORD '${{ secrets.MONGO_PASSWORD || vars.MONGO_PASSWORD }}'
+            put JWT_SECRET '${{ secrets.JWT_SECRET || vars.JWT_SECRET }}'
+            put SMTP_HOST '${{ secrets.SMTP_HOST || vars.SMTP_HOST }}'
+            put SMTP_PORT '${{ secrets.SMTP_PORT || vars.SMTP_PORT }}'
+            put SMTP_SECURE '${{ secrets.SMTP_SECURE || vars.SMTP_SECURE }}'
+            put SMTP_USER '${{ secrets.SMTP_USER || vars.SMTP_USER }}'
+            put SMTP_PASS '${{ secrets.SMTP_PASS || vars.SMTP_PASS }}'
+            put SMTP_FROM '${{ secrets.SMTP_FROM || vars.SMTP_FROM }}'
+            put MINIO_ENDPOINT '${{ secrets.MINIO_ENDPOINT || vars.MINIO_ENDPOINT }}'
+            put MINIO_PORT '${{ secrets.MINIO_PORT || vars.MINIO_PORT }}'
+            put MINIO_USE_SSL '${{ secrets.MINIO_USE_SSL || vars.MINIO_USE_SSL }}'
+            put MINIO_ACCESS_KEY '${{ secrets.MINIO_ACCESS_KEY || vars.MINIO_ACCESS_KEY }}'
+            put MINIO_SECRET_KEY '${{ secrets.MINIO_SECRET_KEY || vars.MINIO_SECRET_KEY }}'
+            put MINIO_BUCKET '${{ secrets.MINIO_BUCKET || vars.MINIO_BUCKET }}'
+            put MINIO_PHOTO_PATH '${{ secrets.MINIO_PHOTO_PATH || vars.MINIO_PHOTO_PATH }}'
+            put HEFENG_PRIVATE_KEY_BASE64 '${{ secrets.HEFENG_PRIVATE_KEY_BASE64 || vars.HEFENG_PRIVATE_KEY_BASE64 }}'
+            put HEFENG_KID '${{ secrets.HEFENG_KID || vars.HEFENG_KID }}'
+            put HEFENG_SUB '${{ secrets.HEFENG_SUB || vars.HEFENG_SUB }}'
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -108,19 +109,9 @@ jobs:
           command_timeout: 30m  # 增加超时时间到30分钟
           script: |
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-            export APP_IMAGE=ghcr.io/${{ env.IMAGE_NAME_LC }}:latest
-            NET="${{ secrets.INFRA_NETWORK_NAME }}"
+            NET="${{ secrets.INFRA_NETWORK_NAME || vars.INFRA_NETWORK_NAME }}"
             if [ -z "$NET" ]; then NET="apps"; fi
             docker network inspect "$NET" >/dev/null 2>&1 || docker network create "$NET"
-            export INFRA_NETWORK_NAME="$NET"
-            if [ -n '${{ secrets.MONGO_URI }}' ]; then
-              export MONGO_URI='${{ secrets.MONGO_URI }}'
-            fi
-            export MONGO_USER='${{ secrets.MONGO_USER }}'
-            export MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}'
-            export MONGO_AUTH_SOURCE='${{ secrets.MONGO_AUTH_SOURCE }}'
-            export MONGO_PORT='${{ secrets.MONGO_PORT }}'
-            export MONGO_DBNAME='${{ secrets.MONGO_DBNAME }}'
             docker compose -f /opt/blablalog/docker-compose.yml pull
             docker compose -f /opt/blablalog/docker-compose.yml up -d
             docker image prune -f
